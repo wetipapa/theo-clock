@@ -5,6 +5,9 @@ import { Card } from "../components/ui/Card";
 import { SceneBackground } from "../components/SceneBackground";
 import { AnalogClock } from "../components/clock/AnalogClock";
 import { unlockAudio, playTap } from "../lib/audio";
+import { withAYa } from "../lib/korean";
+
+const DEFAULT_NAME = "웨티";
 
 interface WelcomeScreenProps {
   onDone: (name: string) => void;
@@ -13,12 +16,12 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onDone, reduceMotion }: WelcomeScreenProps) {
   const [step, setStep] = useState<0 | 1>(0);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(DEFAULT_NAME);
 
   const handleNameSubmit = () => {
     unlockAudio();
     playTap();
-    const trimmed = name.trim().slice(0, 8);
+    const trimmed = name.trim().slice(0, 8) || DEFAULT_NAME;
     setName(trimmed);
     setStep(1);
   };
@@ -42,19 +45,19 @@ export function WelcomeScreen({ onDone, reduceMotion }: WelcomeScreenProps) {
                 id="child-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && name.trim() && handleNameSubmit()}
+                onKeyDown={(e) => e.key === "Enter" && handleNameSubmit()}
                 maxLength={8}
                 placeholder="예: 지우"
                 className="w-full h-14 rounded-2xl border-2 border-[#f1e0c4] bg-[#fffaf1] px-4 text-center text-xl font-extrabold text-[var(--color-ink)] outline-none focus:border-[#ff8a5c]"
                 aria-label="아이 이름 입력"
               />
-              <Button variant="primary" size="lg" className="w-full" onClick={handleNameSubmit} disabled={!name.trim()}>
+              <Button variant="primary" size="lg" className="w-full" onClick={handleNameSubmit}>
                 다음
               </Button>
             </Card>
           </>
         ) : (
-          <TutorialStep name={name.trim() || "친구"} onStart={() => onDone(name.trim() || "친구")} reduceMotion={reduceMotion} />
+          <TutorialStep name={name} onStart={() => onDone(name)} reduceMotion={reduceMotion} />
         )}
       </div>
     </div>
@@ -65,7 +68,7 @@ function TutorialStep({ name, onStart, reduceMotion }: { name: string; onStart: 
   return (
     <>
       <h2 className="text-xl font-black text-[var(--color-ink)] text-center text-balance">
-        {name}야, 만나서 반가워요! 시곗바늘을 손가락으로 쓱 돌려서 시간을 맞춰봐요.
+        {withAYa(name)}, 만나서 반가워요! 시곗바늘을 손가락으로 쓱 돌려서 시간을 맞춰봐요.
       </h2>
       <Card className="px-8 py-6 flex flex-col items-center gap-3">
         <div className="w-40">

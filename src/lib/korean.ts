@@ -30,3 +30,8 @@ export function withIeyoYeyo(word: string): string {
 export function withIGa(word: string): string {
   return word + (hasBatchim(word) ? "이" : "가");
 }
+
+/** 이름을 부를 때 쓰는 호격 조사 (받침 있으면 "아", 없으면 "야") */
+export function withAYa(word: string): string {
+  return word + (hasBatchim(word) ? "아" : "야");
+}

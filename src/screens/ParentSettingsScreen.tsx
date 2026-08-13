@@ -120,35 +120,21 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
           <ul className="flex flex-col gap-1.5 mt-1">
             {STAGES.map((s) => {
               const p = state.stageProgress[s.id];
-              const unlocked = state.unlockedStageIds.includes(s.id);
               return (
                 <li key={s.id} className="flex items-center justify-between text-sm">
                   <span className="font-bold text-[var(--color-ink)]">{s.title}</span>
-                  <div className="flex items-center gap-2">
-                    {p ? (
-                      <span className="flex items-center gap-1 text-[#c2830f] font-black">
-                        <Icon name="star" size={14} /> {p.bestStars}
-                      </span>
-                    ) : (
-                      <span className="text-[var(--color-ink-soft)] font-bold">-</span>
-                    )}
-                    {!unlocked && (
-                      <button
-                        type="button"
-                        onClick={() => dispatch({ type: "UNLOCK_STAGE", stageId: s.id })}
-                        className="text-xs font-black text-[#4fa8c2] underline underline-offset-2"
-                      >
-                        열기
-                      </button>
-                    )}
-                  </div>
+                  {p ? (
+                    <span className="flex items-center gap-1 text-[#c2830f] font-black">
+                      <Icon name="star" size={14} /> {p.bestStars}
+                    </span>
+                  ) : (
+                    <span className="text-[var(--color-ink-soft)] font-bold">-</span>
+                  )}
                 </li>
               );
             })}
           </ul>
-          <Button size="sm" variant="soft" className="mt-1 self-start" onClick={() => dispatch({ type: "UNLOCK_ALL_STAGES" })}>
-            모든 단계 열어두기
-          </Button>
+          <p className="text-xs font-bold text-[var(--color-ink-soft)]">모든 단계는 처음부터 자유롭게 선택할 수 있어요.</p>
         </Card>
 
         {/* 우리 아이 일정 커스텀 */}

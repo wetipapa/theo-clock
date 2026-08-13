@@ -5,6 +5,7 @@ import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
 import { WetyCharacter } from "../components/WetyCharacter";
 import { playTap } from "../lib/audio";
+import { withAYa } from "../lib/korean";
 
 interface HomeMapScreenProps {
   onPlayStage: (stageId: StageId) => void;
@@ -36,7 +37,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
       <div className="flex items-center gap-3 px-5 pt-4 pb-2">
         <WetyCharacter mood="idle" size={64} />
         <div>
-          <p className="text-lg font-black text-[var(--color-ink)]">{name}야, 안녕!</p>
+          <p className="text-lg font-black text-[var(--color-ink)]">{withAYa(name)}, 안녕!</p>
           <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
         </div>
       </div>
@@ -44,35 +45,25 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
       <main className="flex-1 px-4 pb-24 overflow-y-auto">
         <ol className="relative flex flex-col gap-2 pl-2">
           {STAGES.map((stage, i) => {
-            const unlocked = state.unlockedStageIds.includes(stage.id);
             const progress = state.stageProgress[stage.id];
             const isLast = i === STAGES.length - 1;
             return (
               <li key={stage.id} className="relative flex gap-3">
                 <div className="flex flex-col items-center">
-                  <div
-                    className={`flex items-center justify-center h-12 w-12 rounded-full border-4 shrink-0 ${
-                      unlocked ? "bg-[#ffd166] border-[#ffb703]" : "bg-[#e8dcc8] border-[#d9c9a8]"
-                    }`}
-                  >
-                    <Icon name={unlocked ? stage.icon : "lock"} size={22} />
+                  <div className="flex items-center justify-center h-12 w-12 rounded-full border-4 shrink-0 bg-[#ffd166] border-[#ffb703]">
+                    <Icon name={stage.icon} size={22} />
                   </div>
-                  {!isLast && <span className={`w-1 flex-1 min-h-8 rounded-full ${unlocked ? "bg-[#ffd166]" : "bg-[#e8dcc8]"}`} />}
+                  {!isLast && <span className="w-1 flex-1 min-h-8 rounded-full bg-[#ffd166]" />}
                 </div>
 
                 <button
                   type="button"
-                  disabled={!unlocked}
                   onClick={() => {
                     playTap();
                     onPlayStage(stage.id);
                   }}
-                  aria-label={unlocked ? `${stage.title} 시작하기` : `${stage.title}, 아직 잠겨있어요`}
-                  className={`flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform ${
-                    unlocked
-                      ? "bg-[var(--color-card)] border-[#f1e0c4] active:scale-[0.98] shadow-[0_4px_0_#f1e0c4]"
-                      : "bg-[#f3ece0] border-[#e8dcc8] opacity-70"
-                  }`}
+                  aria-label={`${stage.title} 시작하기`}
+                  className="flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform bg-[var(--color-card)] border-[#f1e0c4] active:scale-[0.98] shadow-[0_4px_0_#f1e0c4]"
                 >
                   <div className="min-w-0">
                     <p className="font-extrabold text-[var(--color-ink)] truncate">{stage.title}</p>
@@ -84,11 +75,9 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
                       </p>
                     )}
                   </div>
-                  {unlocked && (
-                    <span className="flex items-center justify-center h-10 w-10 rounded-full bg-[#ff8a5c] text-white shrink-0">
-                      <Icon name="arrow" size={18} />
-                    </span>
-                  )}
+                  <span className="flex items-center justify-center h-10 w-10 rounded-full bg-[#ff8a5c] text-white shrink-0">
+                    <Icon name="arrow" size={18} />
+                  </span>
                 </button>
               </li>
             );

@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { gameReducer } from "./gameReducer";
 import { createDefaultState } from "./gameState";
+import { STAGES } from "../data/stages";
 
 describe("gameReducer", () => {
-  it("스테이지를 완료하면 별이 쌓이고 다음 스테이지가 열린다", () => {
+  it("모든 스테이지가 처음부터 열려 있다", () => {
+    const state = createDefaultState();
+    expect(state.unlockedStageIds).toHaveLength(STAGES.length);
+  });
+
+  it("스테이지를 완료하면 별이 쌓이고 진행도가 기록된다", () => {
     const state = createDefaultState();
     const next = gameReducer(state, { type: "COMPLETE_STAGE", stageId: "hour", starsEarned: 5 });
 
@@ -53,7 +59,7 @@ describe("gameReducer", () => {
 
     expect(reset.settings.soundOn).toBe(false);
     expect(reset.starBalance).toBe(0);
-    expect(reset.unlockedStageIds).toEqual(["hour"]);
+    expect(reset.unlockedStageIds).toHaveLength(STAGES.length);
   });
 
   it("UNLOCK_ALL_STAGES는 모든 스테이지를 즉시 연다", () => {

@@ -40,7 +40,8 @@ export function createDefaultState(): GameState {
     childName: "",
     starBalance: 0,
     starsLifetime: 0,
-    unlockedStageIds: [STAGES[0].id],
+    // 모든 스테이지를 처음부터 자유롭게 고를 수 있게 한다 (깨야만 다음이 열리는 방식이 아님)
+    unlockedStageIds: STAGES.map((s) => s.id),
     stageProgress: {},
     unlockedRewardIds: [],
     settings: {

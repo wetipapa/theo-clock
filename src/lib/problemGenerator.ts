@@ -12,25 +12,26 @@ import { DAY_EVENTS } from "../data/schedule";
 import type { ClockTime, SnapMinutes } from "./time";
 import { addMinutes, formatKoreanTime, isSameTime } from "./time";
 import { type Rng, pickFrom, pickInt, shuffle } from "./rng";
-import { withEulReul, withEuroRo, withIGa, withIeyoYeyo } from "./korean";
+import { withAYa, withEulReul, withEuroRo, withIGa, withIeyoYeyo } from "./korean";
 
-// {time_eul}="8시를"/"8시 30분을", {time_euro}="8시로"/"8시 30분으로" 처럼
-// 받침 유무에 맞는 조사가 이미 붙은 형태로 치환값을 준비해 문법 오류를 막는다.
+// {time_eul}="8시를"/"8시 30분을", {time_euro}="8시로"/"8시 30분으로",
+// {name_a}="지우야"/"민준아" 처럼 받침 유무에 맞는 조사가 이미 붙은 형태로
+// 치환값을 준비해 문법 오류를 막는다.
 const SET_HANDS_TEMPLATES = [
-  "{name}아, 시계 바늘을 돌려서 {time_eul} 만들어볼까?",
+  "{name_a}, 시계 바늘을 돌려서 {time_eul} 만들어볼까?",
   "지금 시계를 {time_euro} 맞춰줄래?",
   "짧은 바늘과 긴 바늘을 움직여서 {time_eul} 표시해보자!",
 ];
 
 const CHOOSE_CLOCK_TEMPLATES = [
   "{time_eul} 가리키는 시계는 어떤 걸까요?",
-  "{name}아, {time}인 시계를 찾아줄래?",
+  "{name_a}, {time}인 시계를 찾아줄래?",
   "여러 시계 중에서 {time_eul} 가리키는 시계를 골라보자!",
 ];
 
 const FLOW_AFTER_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 후에는 몇 시일까요?", "{start}에서 {delta}분이 지나면 몇 시가 될까요?"];
 const FLOW_BEFORE_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 전에는 몇 시였을까요?", "{start}보다 {delta}분 전은 몇 시일까요?"];
-const FLOW_FINAL_TEMPLATE = "{name}야, 지금은 {start_ieyo}. {delta}분 후면 {label} 시간이에요! 시계를 몇 시로 맞추면 될까요?";
+const FLOW_FINAL_TEMPLATE = "{name_a}, 지금은 {start_ieyo}. {delta}분 후면 {label} 시간이에요! 시계를 몇 시로 맞추면 될까요?";
 
 const SCHEDULE_PROMPT = "웨티의 하루를 순서대로 완성해볼까요? 카드를 알맞은 시간에 놓아주세요!";
 
@@ -105,6 +106,7 @@ function buildClockProblems(stage: StageConfig, dayEvent: DayEvent, childName: s
 
     const vars = {
       name: childName,
+      name_a: withAYa(childName),
       time: timeText,
       time_eul: withEulReul(timeText),
       time_euro: withEuroRo(timeText),
@@ -158,6 +160,7 @@ function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: st
       const startText = formatKoreanTime(start);
       promptText = replaceVars(FLOW_FINAL_TEMPLATE, {
         name: childName,
+        name_a: withAYa(childName),
         start: startText,
         start_ieyo: withIeyoYeyo(startText),
         delta: String(delta),

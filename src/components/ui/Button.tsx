@@ -10,9 +10,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  primary: "bg-[#ff8a5c] text-white shadow-[0_6px_0_#d95f34] active:shadow-[0_2px_0_#d95f34] active:translate-y-1 border-2 border-[#ffb08a]",
+  primary: "bg-[var(--color-sunset)] text-white shadow-[0_6px_0_var(--color-sunset-deep)] active:shadow-[0_2px_0_var(--color-sunset-deep)] active:translate-y-1 border-2 border-[var(--color-sunset-soft)]",
   secondary: "bg-[#8fd3e8] text-[#1f4a57] shadow-[0_6px_0_#4fa8c2] active:shadow-[0_2px_0_#4fa8c2] active:translate-y-1 border-2 border-[#bfe6f2]",
-  soft: "bg-[#fffaf1] text-[#4a3626] shadow-[0_4px_0_#e8d9c0] active:shadow-[0_1px_0_#e8d9c0] active:translate-y-1 border-2 border-[#f1e0c4]",
+  soft: "bg-[var(--color-card)] text-[var(--color-ink)] shadow-[0_4px_0_var(--color-line-deep)] active:shadow-[0_1px_0_var(--color-line-deep)] active:translate-y-1 border-2 border-[var(--color-line)]",
   ghost: "bg-transparent text-[#8a6a4a] hover:bg-[#ffffff55]",
 };
 

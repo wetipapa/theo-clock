@@ -5,6 +5,7 @@
   --color-cream-deep: #ffedd3;
   --color-sunset: #ff8a5c;
   --color-sunset-deep: #f2673a;
+  --color-sunset-soft: #ffb08a;
   --color-sky: #8fd3e8;
   --color-sky-deep: #4fa8c2;
   --color-honey: #ffd166;
@@ -13,6 +14,16 @@
   --color-ink: #4a3626;
   --color-ink-soft: #8a6a4a;
   --color-card: #fffaf1;
+  --color-line: #f1e0c4;
+  --color-line-deep: #e8d9c0;
+
+  /* 시계탐험대의 서비스 색 — 허브(wetipapa-play)의 --wp-color-clock과 같은 값.
+     형제 서비스가 초록·레드오렌지·블루라 남는 자리가 바이올렛이다. */
+  --color-accent: #7c4fe0;
+  --color-accent-deep: #5a34ad;
+  --color-accent-soft: #b79cf0;
+  --color-accent-tint: #e8dffb;
+
   --font-rounded: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
 }
 
@@ -21,6 +32,24 @@
   --clock-rim: #5b3a29;
   --ink-soft: #8a6a4a;
   color-scheme: light;
+}
+
+/*
+ * 서비스 색을 입히는 자리. 첫 화면·방 꾸미기·부모 설정에만 두른다.
+ *
+ * 문제를 푸는 화면에는 두르지 않는다 — 거기는 시간대에 따라 하늘색·노을·밤하늘로
+ * 바뀌는 장면 배경이 이야기를 만든다. 그 위에 서비스 색을 덮으면 장면이 죽는다.
+ */
+.theme-service {
+  --color-sunset: var(--color-accent);
+  --color-sunset-deep: var(--color-accent-deep);
+  --color-sunset-soft: var(--color-accent-soft);
+  --color-cream: #f7f4fe;
+  --color-cream-deep: #ebe3fb;
+  --color-card: #fdfcff;
+  --color-line: #ddd2f5;
+  --color-line-deep: #cabde9;
+  background: var(--color-cream);
 }
 
 * {

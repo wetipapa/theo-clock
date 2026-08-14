@@ -15,13 +15,13 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
   const totalCompleted = Object.values(state.stageProgress).filter(Boolean).length;
 
   return (
-    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="theme-service relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center gap-3 px-4 pt-4 safe-top">
         <button
           type="button"
           onClick={onBack}
           aria-label="홈으로 돌아가기"
-          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[#f1e0c4] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[var(--color-line)] shadow-[0_3px_0_var(--color-line)] active:translate-y-0.5"
         >
           <Icon name="arrow" className="rotate-180" size={20} />
         </button>

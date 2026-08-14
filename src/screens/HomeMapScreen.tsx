@@ -23,13 +23,13 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
   const [stagesOpen, setStagesOpen] = useState(false);
 
   return (
-    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="theme-service relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center justify-between px-4 pt-4 safe-top">
         <button
           type="button"
           onClick={() => onOpenSettings()}
           aria-label="부모님 설정 열기"
-          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[#f1e0c4] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[var(--color-line)] shadow-[0_3px_0_var(--color-line)] active:translate-y-0.5"
         >
           <Icon name="settings" size={22} />
         </button>
@@ -79,7 +79,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
             type="button"
             onClick={() => setStagesOpen((v) => !v)}
             aria-expanded={stagesOpen}
-            className="flex-1 rounded-2xl border-2 border-[#f1e0c4] bg-[var(--color-card)] px-3 py-3 text-sm font-black text-[var(--color-ink-soft)] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+            className="flex-1 rounded-2xl border-2 border-[var(--color-line)] bg-[var(--color-card)] px-3 py-3 text-sm font-black text-[var(--color-ink-soft)] shadow-[0_3px_0_var(--color-line)] active:translate-y-0.5"
           >
             단계 고르기 {stagesOpen ? "▴" : "▾"}
           </button>
@@ -115,7 +115,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
                   className={`flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform bg-[var(--color-card)] active:scale-[0.98] ${
                     isResume
                       ? "border-[var(--color-sunset)] shadow-[0_4px_0_var(--color-sunset-deep)]"
-                      : "border-[#f1e0c4] shadow-[0_4px_0_#f1e0c4]"
+                      : "border-[var(--color-line)] shadow-[0_4px_0_var(--color-line)]"
                   }`}
                 >
                   <div className="min-w-0">

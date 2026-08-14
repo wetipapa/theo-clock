@@ -115,13 +115,13 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="theme-service relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center justify-between px-4 pt-4 safe-top">
         <button
           type="button"
           onClick={onBack}
           aria-label="홈으로 돌아가기"
-          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[#f1e0c4] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+          className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[var(--color-line)] shadow-[0_3px_0_var(--color-line)] active:translate-y-0.5"
         >
           <Icon name="arrow" className="rotate-180" size={20} />
         </button>
@@ -132,7 +132,7 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
       {/* 방 미리보기 — 산 물건이 여기에 바로 나타나야 "샀다"는 게 느껴진다 */}
       <div
         ref={roomRef}
-        className="relative mx-4 mt-4 h-72 sm:h-80 shrink-0 rounded-[32px] overflow-hidden border-4 border-[#f1e0c4]"
+        className="relative mx-4 mt-4 h-72 sm:h-80 shrink-0 rounded-[32px] overflow-hidden border-4 border-[var(--color-line)]"
         style={{ background: "linear-gradient(180deg,#fff1dc 0%,#fff8ee 55%)" }}
       >
         <div className="absolute inset-x-0 bottom-0" style={{ height: `${FLOOR_TOP}%`, background: "#e8c893" }} />

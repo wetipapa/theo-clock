@@ -1,9 +1,10 @@
 import type { DayEvent } from "../types";
 
 /**
- * 웨티의 하루 일정 (시간순).
+ * 하루 일정 (시간순).
  * 각 스테이지의 "마지막 문제"는 이 목록의 시간을 정답으로 사용해
- * "문제를 풀면 웨티가 실제로 그 행동을 한다"는 이야기 흐름을 만든다.
+ * "문제를 풀면 그 일이 실제로 일어난다"는 이야기 흐름을 만든다.
+ * 특정 아이를 주어로 세우지 않는다 — 시계를 맞춘 아이 본인의 하루로 읽혀야 한다.
  * 일정 자체를 게임으로 만들지는 않는다 — 시계를 읽는 문제에 상황과 이야기를 입히는 소재다.
  * `sleep`은 현재 어느 스테이지에도 연결돼 있지 않지만, 밤 시간대 문제를 추가할 때
  * 쓸 수 있도록 남겨 둔다.
@@ -16,7 +17,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 8, minute: 0 },
     sceneId: "bus-stop",
     promptTemplate: "유치원 버스가 {time}에 와요! 시계를 맞춰서 버스를 놓치지 말자.",
-    actionText: "웨티가 버스를 타고 유치원으로 출발했어요!",
+    actionText: "버스를 타고 유치원으로 출발했어요!",
   },
   {
     id: "class",
@@ -25,7 +26,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 9, minute: 30 },
     sceneId: "kindergarten",
     promptTemplate: "유치원에서 신나는 놀이 시간은 {time_ieyo}! 시계를 맞춰볼까?",
-    actionText: "웨티가 친구들과 신나게 놀았어요!",
+    actionText: "친구들과 신나게 놀았어요!",
   },
   {
     id: "lunch",
@@ -34,7 +35,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 12, minute: 20 },
     sceneId: "lunch",
     promptTemplate: "맛있는 점심시간은 {time_ieyo}! 시계를 맞춰줄래?",
-    actionText: "웨티가 밥을 냠냠 먹었어요!",
+    actionText: "점심을 냠냠 맛있게 먹었어요!",
   },
   {
     id: "snack",
@@ -43,7 +44,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 3, minute: 25 },
     sceneId: "snack",
     promptTemplate: "달콤한 간식 시간은 {time_ieyo}! 정확하게 맞혀볼까?",
-    actionText: "웨티가 쿠키를 냠냠 먹었어요!",
+    actionText: "쿠키를 냠냠 맛있게 먹었어요!",
   },
   {
     id: "bath",
@@ -52,7 +53,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 6, minute: 30 },
     sceneId: "bath",
     promptTemplate: "{time}에는 목욕을 해요!",
-    actionText: "웨티가 보글보글 목욕을 했어요!",
+    actionText: "보글보글 목욕을 마쳤어요!",
   },
   {
     id: "sleep",
@@ -61,7 +62,7 @@ export const DAY_EVENTS: DayEvent[] = [
     time: { hour: 8, minute: 30 },
     sceneId: "night",
     promptTemplate: "{time_iga} 되면 잠자리에 들 시간이에요!",
-    actionText: "웨티가 폭 잠들었어요. 잘 자요!",
+    actionText: "포근하게 잠들었어요. 잘 자요!",
   },
 ];
 

@@ -39,7 +39,7 @@ export interface DayEvent {
   sceneId: SceneId;
   /** {time} 플레이스홀더를 포함한 안내 문구 */
   promptTemplate: string;
-  /** 정답을 맞혔을 때 웨티가 하는 행동 설명 */
+  /** 정답을 맞혔을 때 이어지는 장면 설명 */
   actionText: string;
 }
 
@@ -91,6 +91,16 @@ export interface RewardItem {
   label: string;
   icon: IconName;
   cost: number;
-  /** 방 안에서의 배치 위치 (퍼센트 좌표) */
-  position: { x: number; y: number };
+  /**
+   * 어디에 놓이는 물건인가.
+   * `wall`은 x/y 퍼센트 좌표의 중심에, `floor`는 x 좌표의 바닥선 위에 세운다.
+   * 바닥 물건을 y좌표로 일일이 맞추면 조금만 틀어져도 공중에 뜬 것처럼 보인다.
+   */
+  layer: "wall" | "floor";
+  /** 가로 위치(%) — 방 미리보기 폭 기준 */
+  x: number;
+  /** 세로 위치(%) — `wall`일 때만 쓴다 */
+  y?: number;
+  /** 그려질 크기(px) — 가구다운 덩치가 나오도록 아이템마다 다르게 준다 */
+  size: number;
 }

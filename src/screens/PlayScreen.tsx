@@ -211,7 +211,7 @@ function StageCompleteView({
         <WetiCharacter mood="excited" size={150} animate={!reduceMotion} />
         <h1 className="text-2xl font-black text-[var(--color-ink)]">{stage.title} 완료!</h1>
         <p className="font-bold text-[var(--color-ink-soft)] max-w-xs text-balance">
-          정말 잘했어요! 웨티가 {stage.description}
+          정말 잘했어요! 이제 {stage.title}, 문제없어요!
         </p>
         <div className="flex items-center gap-2 text-[#c2830f] font-black text-2xl">
           <Icon name="star" size={30} />+{starsEarned}

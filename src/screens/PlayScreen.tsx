@@ -8,15 +8,14 @@ import { playCorrect, playFanfare } from "../lib/audio";
 import { useGame } from "../state/GameContext";
 import type { StageId } from "../types";
 import { SceneBackground } from "../components/SceneBackground";
-import { WetyCharacter } from "../components/WetyCharacter";
+import { WetiCharacter } from "../components/WetiCharacter";
 import { StarCounter } from "../components/ui/StarCounter";
 import { Button } from "../components/ui/Button";
 import { Icon } from "../components/Icon";
 import { HandsChallenge } from "../components/game/HandsChallenge";
 import { ChooseClockGame } from "../components/game/ChooseClockGame";
-import { ScheduleGame } from "../components/game/ScheduleGame";
 import { FeedbackOverlay } from "../components/game/FeedbackOverlay";
-import type { Problem, ScheduleProblem, StageConfig } from "../types";
+import type { Problem, StageConfig } from "../types";
 
 interface PlayScreenProps {
   stageId: StageId;
@@ -42,11 +41,9 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
   const [feedbackStars, setFeedbackStars] = useState(0);
   const [feedbackAction, setFeedbackAction] = useState<string | undefined>(undefined);
   const [complete, setComplete] = useState(false);
-  const [scheduleFilled, setScheduleFilled] = useState(0);
 
-  const isSchedule = problems[0]?.mode === "schedule";
-  const totalUnits = isSchedule ? (problems[0] as ScheduleProblem).slots.length : problems.length;
-  const currentUnit = isSchedule ? scheduleFilled : currentIndex;
+  const totalUnits = problems.length;
+  const currentUnit = currentIndex;
 
   const handleWrongAttempt = () => setWrongAttempts((n) => n + 1);
 
@@ -77,25 +74,6 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
     } else {
       setCurrentIndex((i) => i + 1);
     }
-  };
-
-  const handleScheduleItem = () => {
-    const earned = 1;
-    setSessionStars((s) => s + earned);
-    setScheduleFilled((n) => n + 1);
-    playCorrect();
-  };
-
-  const handleScheduleAllComplete = () => {
-    setFeedbackStars(0);
-    setPraise(randomPraise());
-    setFeedbackAction(dayEvent.actionText);
-    setShowFeedback(true);
-  };
-
-  const handleScheduleNext = () => {
-    setShowFeedback(false);
-    finalize(sessionStars);
   };
 
   if (complete) {
@@ -136,27 +114,13 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
       </div>
 
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center gap-5 px-4 py-6">
-        {isSchedule ? (
-          <ScheduleGame
-            problemKey={(problems[0] as ScheduleProblem).id}
-            promptText={(problems[0] as ScheduleProblem).promptText}
-            slots={(problems[0] as ScheduleProblem).slots}
-            cards={(problems[0] as ScheduleProblem).cards}
-            disabled={showFeedback}
-            reduceMotion={reduceMotion}
-            onCorrectItem={handleScheduleItem}
-            onWrongAttempt={handleWrongAttempt}
-            onAllComplete={handleScheduleAllComplete}
-          />
-        ) : (
-          <ProblemView
-            problem={problems[currentIndex]}
-            disabled={showFeedback}
-            reduceMotion={reduceMotion}
-            onCorrect={handleCorrect}
-            onWrongAttempt={handleWrongAttempt}
-          />
-        )}
+        <ProblemView
+          problem={problems[currentIndex]}
+          disabled={showFeedback}
+          reduceMotion={reduceMotion}
+          onCorrect={handleCorrect}
+          onWrongAttempt={handleWrongAttempt}
+        />
       </main>
 
       <FeedbackOverlay
@@ -165,7 +129,7 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
         starsEarned={feedbackStars}
         actionText={feedbackAction}
         reduceMotion={reduceMotion}
-        onNext={isSchedule && scheduleFilled >= totalUnits ? handleScheduleNext : handleNext}
+        onNext={handleNext}
       />
     </div>
   );
@@ -248,7 +212,7 @@ function StageCompleteView({
     <div className="relative flex flex-col items-center justify-center min-h-full gap-5 px-6 text-center overflow-hidden">
       <SceneBackground sceneId="home-morning" />
       <div className="relative z-10 flex flex-col items-center gap-4">
-        <WetyCharacter mood="happy" size={150} bounce={!reduceMotion} />
+        <WetiCharacter mood="excited" size={150} animate={!reduceMotion} />
         <h1 className="text-2xl font-black text-[var(--color-ink)]">{stage.title} 완료!</h1>
         <p className="font-bold text-[var(--color-ink-soft)] max-w-xs text-balance">
           {childName}야, 정말 잘했어요! 웨티가 {stage.description}

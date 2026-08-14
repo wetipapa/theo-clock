@@ -65,6 +65,6 @@ describe("gameReducer", () => {
   it("UNLOCK_ALL_STAGES는 모든 스테이지를 즉시 연다", () => {
     const state = createDefaultState();
     const next = gameReducer(state, { type: "UNLOCK_ALL_STAGES" });
-    expect(next.unlockedStageIds).toHaveLength(6);
+    expect(next.unlockedStageIds).toHaveLength(STAGES.length);
   });
 });

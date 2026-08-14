@@ -1,8 +1,8 @@
 import type { ClockTime, SnapMinutes } from "./lib/time";
 
-export type StageId = "hour" | "half" | "ten" | "five" | "flow" | "schedule";
+export type StageId = "hour" | "half" | "ten" | "five" | "flow";
 
-export type GameMode = "set-hands" | "choose-clock" | "time-flow" | "schedule";
+export type GameMode = "set-hands" | "choose-clock" | "time-flow";
 
 export type IconName =
   | "sun"
@@ -84,20 +84,7 @@ export interface TimeFlowProblem extends BaseProblem {
   target: ClockTime;
 }
 
-export interface ScheduleCard {
-  id: string;
-  label: string;
-  icon: IconName;
-  time: ClockTime;
-}
-
-export interface ScheduleProblem extends BaseProblem {
-  mode: "schedule";
-  slots: ScheduleCard[]; // 시간순 정렬된 정답 슬롯
-  cards: ScheduleCard[]; // 섞인 카드
-}
-
-export type Problem = SetHandsProblem | ChooseClockProblem | TimeFlowProblem | ScheduleProblem;
+export type Problem = SetHandsProblem | ChooseClockProblem | TimeFlowProblem;
 
 export interface RewardItem {
   id: string;

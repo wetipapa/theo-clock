@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { WetyCharacter } from "../WetyCharacter";
+import { WetiCharacter } from "../WetiCharacter";
 import { Confetti } from "../ui/Confetti";
 import { Icon } from "../Icon";
 
@@ -30,7 +30,7 @@ export function FeedbackOverlay({ show, praise, starsEarned, actionText, reduceM
           reduceMotion ? "" : "animate-[pop-in_0.4s_ease-out]"
         }`}
       >
-        <WetyCharacter mood="excited" size={110} bounce={!reduceMotion} />
+        <WetiCharacter mood="excited" size={110} animate={!reduceMotion} />
         <p className="text-xl font-extrabold text-[var(--color-ink)] text-center">{praise}</p>
         {actionText && <p className="text-sm font-bold text-[var(--color-ink-soft)] text-center max-w-56">{actionText}</p>}
         {starsEarned > 0 && (

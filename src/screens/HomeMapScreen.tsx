@@ -1,9 +1,9 @@
-import { STAGES } from "../data/stages";
+import { STAGES, pickResumeStage } from "../data/stages";
 import { useGame } from "../state/GameContext";
 import type { StageId } from "../types";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
-import { WetyCharacter } from "../components/WetyCharacter";
+import { WetiCharacter } from "../components/WetiCharacter";
 import { playTap } from "../lib/audio";
 import { withAYa } from "../lib/korean";
 
@@ -16,6 +16,9 @@ interface HomeMapScreenProps {
 export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeMapScreenProps) {
   const { state } = useGame();
   const name = state.childName || "친구";
+  // 6~8세가 "다음에 뭘 누를지"를 읽지 않고 알 수 있도록, 이어서 할 단계 하나를 크게 띄운다.
+  // 단계 목록은 그대로 아래에 남겨 원하는 단계를 직접 고를 수도 있다.
+  const resume = pickResumeStage(state.stageProgress);
 
   return (
     <div className="relative min-h-full flex flex-col bg-[var(--color-cream)]">
@@ -35,18 +38,45 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
       </header>
 
       <div className="flex items-center gap-3 px-5 pt-4 pb-2">
-        <WetyCharacter mood="idle" size={64} />
+        <WetiCharacter mood="idle" size={64} animate={!state.settings.reduceMotion} />
         <div>
           <p className="text-lg font-black text-[var(--color-ink)]">{withAYa(name)}, 안녕!</p>
           <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
         </div>
       </div>
 
+      <div className="px-4 pb-1">
+        <button
+          type="button"
+          onClick={() => {
+            playTap();
+            onPlayStage(resume.stage.id);
+          }}
+          aria-label={`${resume.stage.title} ${resume.isFirstTime ? "시작하기" : "다시 해보기"}`}
+          className="w-full flex items-center gap-3 rounded-3xl bg-[var(--color-sunset)] px-5 py-4 text-left text-white shadow-[0_5px_0_var(--color-sunset-deep)] active:translate-y-1 active:shadow-[0_1px_0_var(--color-sunset-deep)] transition-transform"
+        >
+          <span className="flex items-center justify-center h-12 w-12 rounded-full bg-white/25 shrink-0">
+            <Icon name={resume.stage.icon} size={24} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-xs font-black text-white/85">
+              {resume.isFirstTime ? "여기부터 시작해요" : "다시 해볼까요?"}
+            </span>
+            <span className="block text-xl font-black truncate">{resume.stage.title}</span>
+          </span>
+          <span className="flex items-center justify-center h-11 w-11 rounded-full bg-white text-[var(--color-sunset)] shrink-0">
+            <Icon name="arrow" size={20} />
+          </span>
+        </button>
+      </div>
+
       <main className="flex-1 px-4 pb-24 overflow-y-auto">
+        <p className="px-1 pt-3 pb-1 text-xs font-black text-[var(--color-ink-soft)]">모든 단계</p>
         <ol className="relative flex flex-col gap-2 pl-2">
           {STAGES.map((stage, i) => {
             const progress = state.stageProgress[stage.id];
             const isLast = i === STAGES.length - 1;
+            const isResume = stage.id === resume.stage.id;
             return (
               <li key={stage.id} className="relative flex gap-3">
                 <div className="flex flex-col items-center">
@@ -63,7 +93,11 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
                     onPlayStage(stage.id);
                   }}
                   aria-label={`${stage.title} 시작하기`}
-                  className="flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform bg-[var(--color-card)] border-[#f1e0c4] active:scale-[0.98] shadow-[0_4px_0_#f1e0c4]"
+                  className={`flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform bg-[var(--color-card)] active:scale-[0.98] ${
+                    isResume
+                      ? "border-[var(--color-sunset)] shadow-[0_4px_0_var(--color-sunset-deep)]"
+                      : "border-[#f1e0c4] shadow-[0_4px_0_#f1e0c4]"
+                  }`}
                 >
                   <div className="min-w-0">
                     <p className="font-extrabold text-[var(--color-ink)] truncate">{stage.title}</p>

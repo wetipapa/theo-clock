@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { generateStageProblems } from "./problemGenerator";
-import { getStage } from "../data/stages";
+import { STAGES, getStage } from "../data/stages";
 import { getDayEvent } from "../data/schedule";
 import { createRng } from "./rng";
 import { isSameTime } from "./time";
-import type { ChooseClockProblem, ScheduleProblem, SetHandsProblem, TimeFlowProblem } from "../types";
+import type { ChooseClockProblem, SetHandsProblem, TimeFlowProblem } from "../types";
 
 describe("generateStageProblems: 정각/30분/10분/5분 스테이지", () => {
   for (const stageId of ["hour", "half", "ten", "five"] as const) {
@@ -82,18 +82,15 @@ describe("generateStageProblems: 시간의 흐름", () => {
   });
 });
 
-describe("generateStageProblems: 하루 일정 완성하기", () => {
-  it("슬롯은 하루 시간 순서를 유지하고, 카드는 섞여 있다", () => {
-    const stage = getStage("schedule");
-    const dayEvent = getDayEvent(stage.dayEventId);
-    const [problem] = generateStageProblems(stage, dayEvent, "웨티", createRng(5)) as [ScheduleProblem];
-
-    expect(problem.slots.length).toBeGreaterThanOrEqual(5);
-    expect(problem.cards).toHaveLength(problem.slots.length);
-
-    // 카드 집합과 슬롯 집합은 동일해야 한다(순서만 다름)
-    const slotIds = new Set(problem.slots.map((s) => s.id));
-    const cardIds = new Set(problem.cards.map((c) => c.id));
-    expect(cardIds).toEqual(slotIds);
+describe("스테이지 구성", () => {
+  it("시계 읽기 5단계로만 이뤄진다 (하루 일정 완성 게임은 제외됨)", () => {
+    expect(STAGES.map((s) => s.id)).toEqual(["hour", "half", "ten", "five", "flow"]);
+    // 모든 스테이지가 시계를 직접 읽고 맞추는 방식이어야 한다
+    for (const stage of STAGES) {
+      const problems = generateStageProblems(stage, getDayEvent(stage.dayEventId), "웨티", createRng(1));
+      for (const p of problems) {
+        expect(["set-hands", "choose-clock", "time-flow"]).toContain(p.mode);
+      }
+    }
   });
 });

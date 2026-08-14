@@ -1,7 +1,7 @@
 import type { StageId } from "../types";
 import { STAGES, getNextStage } from "../data/stages";
 import { REWARD_ITEMS } from "../data/rewards";
-import type { CustomScheduleEntry, GameState } from "./gameState";
+import type { GameState } from "./gameState";
 import { createDefaultState } from "./gameState";
 
 export type GameAction =
@@ -13,7 +13,6 @@ export type GameAction =
   | { type: "UNLOCK_REWARD"; rewardId: string }
   | { type: "SET_SOUND"; on: boolean }
   | { type: "SET_REDUCE_MOTION"; on: boolean }
-  | { type: "SET_CUSTOM_SCHEDULE"; entries: CustomScheduleEntry[] }
   | { type: "RESET_PROGRESS" }
   | { type: "HYDRATE"; state: GameState };
 
@@ -72,9 +71,6 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "SET_REDUCE_MOTION":
       return { ...state, settings: { ...state.settings, reduceMotion: action.on } };
-
-    case "SET_CUSTOM_SCHEDULE":
-      return { ...state, customSchedule: action.entries };
 
     case "RESET_PROGRESS":
       return { ...createDefaultState(), settings: state.settings };

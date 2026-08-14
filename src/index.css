@@ -72,13 +72,15 @@ button {
   }
 }
 
-@keyframes wety-bounce {
+/* 웨티 배지가 살짝 떠 있는 느낌. 예전 젤리 마스코트(0.6s, -10px)보다 느리고 얕게 —
+   얼굴 선화라 크게 튀면 표정이 읽히지 않는다. */
+@keyframes weti-bounce {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px) scale(1.03);
+    transform: translateY(-6px);
   }
 }
 

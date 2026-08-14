@@ -3,7 +3,7 @@ import { REWARD_ITEMS } from "../data/rewards";
 import { useGame } from "../state/GameContext";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
-import { WetyCharacter } from "../components/WetyCharacter";
+import { WetiCharacter } from "../components/WetiCharacter";
 import { Confetti } from "../components/ui/Confetti";
 import { playReward, playTap } from "../lib/audio";
 
@@ -51,7 +51,7 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
           </div>
         ))}
         <div className="absolute left-1/2 bottom-2 -translate-x-1/2">
-          <WetyCharacter mood="happy" size={72} />
+          <WetiCharacter mood="happy" size={72} />
         </div>
         <Confetti active={!!justUnlocked} reduceMotion={reduceMotion} count={14} />
       </div>

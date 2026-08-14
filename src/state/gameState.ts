@@ -1,4 +1,3 @@
-import type { ClockTime } from "../lib/time";
 import type { StageId } from "../types";
 import { STAGES } from "../data/stages";
 
@@ -7,12 +6,6 @@ export interface StageProgress {
   timesCompleted: number;
   /** 가장 좋았던 시도에서 얻은 별 개수 */
   bestStars: number;
-}
-
-export interface CustomScheduleEntry {
-  id: string;
-  label: string;
-  time: ClockTime;
 }
 
 export interface GameSettings {
@@ -30,7 +23,6 @@ export interface GameState {
   stageProgress: Partial<Record<StageId, StageProgress>>;
   unlockedRewardIds: string[];
   settings: GameSettings;
-  customSchedule: CustomScheduleEntry[];
 }
 
 export function createDefaultState(): GameState {
@@ -48,6 +40,5 @@ export function createDefaultState(): GameState {
       soundOn: true,
       reduceMotion: false,
     },
-    customSchedule: [],
   };
 }

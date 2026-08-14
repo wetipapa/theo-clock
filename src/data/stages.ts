@@ -56,17 +56,6 @@ export const STAGES: StageConfig[] = [
     icon: "bath",
     description: "지금 시간에서 몇 분 후, 몇 분 전을 계산해요.",
   },
-  {
-    id: "schedule",
-    order: 6,
-    title: "웨티의 하루 완성",
-    subtitle: "하루 일정 카드를 시간에 맞게 놓아요",
-    grid: 5,
-    dayEventId: "sleep",
-    problemCount: 6,
-    icon: "moon",
-    description: "하루 동안 배운 시간을 모두 모아 웨티의 하루를 완성해요.",
-  },
 ];
 
 export function getStage(id: string): StageConfig {
@@ -78,4 +67,19 @@ export function getStage(id: string): StageConfig {
 export function getNextStage(id: string): StageConfig | null {
   const stage = getStage(id);
   return STAGES.find((s) => s.order === stage.order + 1) ?? null;
+}
+
+/**
+ * 지금 이어서 할 스테이지를 고른다.
+ * - 아직 한 번도 안 한 것이 있으면 그중 가장 앞선 것
+ * - 전부 해봤으면 별을 가장 적게 받은 것 (다시 해볼 여지가 큰 쪽)
+ */
+export function pickResumeStage(progress: Partial<Record<string, { bestStars: number }>>): {
+  stage: StageConfig;
+  isFirstTime: boolean;
+} {
+  const untouched = STAGES.find((s) => !progress[s.id]);
+  if (untouched) return { stage: untouched, isFirstTime: true };
+  const weakest = [...STAGES].sort((a, b) => (progress[a.id]!.bestStars ?? 0) - (progress[b.id]!.bestStars ?? 0))[0];
+  return { stage: weakest, isFirstTime: false };
 }

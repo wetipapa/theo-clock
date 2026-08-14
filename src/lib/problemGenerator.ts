@@ -2,13 +2,10 @@ import type {
   ChooseClockProblem,
   DayEvent,
   Problem,
-  ScheduleCard,
-  ScheduleProblem,
   SetHandsProblem,
   StageConfig,
   TimeFlowProblem,
 } from "../types";
-import { DAY_EVENTS } from "../data/schedule";
 import type { ClockTime, SnapMinutes } from "./time";
 import { addMinutes, formatKoreanTime, isSameTime } from "./time";
 import { type Rng, pickFrom, pickInt, shuffle } from "./rng";
@@ -33,7 +30,6 @@ const FLOW_AFTER_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 후에는 몇 
 const FLOW_BEFORE_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 전에는 몇 시였을까요?", "{start}보다 {delta}분 전은 몇 시일까요?"];
 const FLOW_FINAL_TEMPLATE = "{name_a}, 지금은 {start_ieyo}. {delta}분 후면 {label} 시간이에요! 시계를 몇 시로 맞추면 될까요?";
 
-const SCHEDULE_PROMPT = "웨티의 하루를 순서대로 완성해볼까요? 카드를 알맞은 시간에 놓아주세요!";
 
 /** grid에서 허용되는 분 목록 (예: 10분 그리드 -> 0,10,20,...,50) */
 function allowedMinutes(grid: SnapMinutes): number[] {
@@ -197,28 +193,8 @@ function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: st
   return problems;
 }
 
-function buildScheduleProblem(childName: string, rng: Rng): ScheduleProblem {
-  const slots: ScheduleCard[] = DAY_EVENTS.map((e) => ({ id: e.id, label: e.label, icon: e.icon, time: e.time }));
-  let cards = shuffle(rng, slots);
-  let guard = 0;
-  while (cards.every((c, i) => c.id === slots[i].id) && guard < 10) {
-    cards = shuffle(rng, slots);
-    guard++;
-  }
-  return {
-    id: "schedule-0",
-    mode: "schedule",
-    grid: 5,
-    slots,
-    cards,
-    promptText: replaceVars(SCHEDULE_PROMPT, { name: childName }),
-    isFinal: true,
-  };
-}
-
 /** 스테이지에 맞는 문제 목록을 생성한다 */
 export function generateStageProblems(stage: StageConfig, dayEvent: DayEvent, childName: string, rng: Rng): Problem[] {
-  if (stage.id === "schedule") return [buildScheduleProblem(childName, rng)];
   if (stage.id === "flow") return buildFlowProblems(stage, dayEvent, childName, rng);
   return buildClockProblems(stage, dayEvent, childName, rng);
 }

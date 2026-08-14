@@ -16,7 +16,7 @@ export function BlogLink({ className = "" }: { className?: string }) {
       >
         ✍️ 웨티아빠 블로그
       </a>
-      <span className="ml-1">에서 더 많은 학습 자료를 만나요</span>
+      에서 더 많은 학습 자료를 만나요
     </p>
   );
 }

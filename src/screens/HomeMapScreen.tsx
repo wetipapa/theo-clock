@@ -5,6 +5,7 @@ import type { StageId } from "../types";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
 import sceneClock from "../assets/characters/weti-scene-clock.png";
+import { BlogLink } from "../components/BlogLink";
 
 interface HomeMapScreenProps {
   onPlayStage: (stageId: StageId) => void;
@@ -137,6 +138,8 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         </ol>
         )}
         </div>
+
+        <BlogLink className="mt-1" />
       </main>
 
     </div>

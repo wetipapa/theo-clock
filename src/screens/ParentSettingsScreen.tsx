@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BlogLink } from "../components/BlogLink";
 import { STAGES } from "../data/stages";
 import { useGame } from "../state/GameContext";
 import { Icon } from "../components/Icon";
@@ -133,6 +134,8 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
             </Button>
           )}
         </Card>
+
+        <BlogLink className="pb-2" />
       </main>
     </div>
   );

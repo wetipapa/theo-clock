@@ -10,10 +10,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
       manifest: {
-        name: "웨티의 시간 대작전",
-        short_name: "웨티의 시간",
+        name: "웨티 시계탐험대",
+        short_name: "시계탐험대",
         description: "웨티와 함께 시계 읽기를 배우는 어린이 교육 게임",
         theme_color: "#ff8a5c",
         background_color: "#fff6ea",

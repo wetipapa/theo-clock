@@ -34,7 +34,7 @@ export function WelcomeScreen({ onDone, reduceMotion }: WelcomeScreenProps) {
           <>
             <WetyCharacter mood="happy" size={130} bounce={!reduceMotion} />
             <div className="text-center">
-              <h1 className="text-2xl font-black text-[var(--color-ink)]">웨티의 시간 대작전</h1>
+              <h1 className="text-2xl font-black text-[var(--color-ink)]">웨티 시계탐험대</h1>
               <p className="mt-1 font-bold text-[var(--color-ink-soft)]">시계 읽기와 친해지는 하루 이야기</p>
             </div>
             <Card className="w-full max-w-sm px-6 py-6 flex flex-col items-center gap-4">

@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { Icon } from "../components/Icon";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
-import { playTap } from "../lib/audio";
 
 interface ParentGateProps {
   onPass: () => void;
@@ -40,7 +39,6 @@ export function ParentGate({ onPass, onCancel }: ParentGateProps) {
               key={opt}
               type="button"
               onClick={() => {
-                playTap();
                 if (opt === question.answer) onPass();
                 else setWrong(true);
               }}

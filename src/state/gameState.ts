@@ -16,7 +16,6 @@ export interface GameSettings {
 export interface GameState {
   version: 1;
   onboarded: boolean;
-  childName: string;
   starBalance: number;
   starsLifetime: number;
   unlockedStageIds: StageId[];
@@ -29,7 +28,6 @@ export function createDefaultState(): GameState {
   return {
     version: 1,
     onboarded: false,
-    childName: "",
     starBalance: 0,
     starsLifetime: 0,
     // 모든 스테이지를 처음부터 자유롭게 고를 수 있게 한다 (깨야만 다음이 열리는 방식이 아님)

@@ -5,8 +5,6 @@ import type { StageId } from "../types";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
 import sceneClock from "../assets/characters/weti-scene-clock.png";
-import { playTap } from "../lib/audio";
-import { withAYa } from "../lib/korean";
 
 interface HomeMapScreenProps {
   onPlayStage: (stageId: StageId) => void;
@@ -16,7 +14,6 @@ interface HomeMapScreenProps {
 
 export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeMapScreenProps) {
   const { state } = useGame();
-  const name = state.childName || "친구";
   // 6~8세가 "다음에 뭘 누를지"를 읽지 않고 알 수 있도록, 이어서 할 단계 하나를 크게 띄운다.
   // 단계 목록은 그대로 아래에 남겨 원하는 단계를 직접 고를 수도 있다.
   const resume = pickResumeStage(state.stageProgress);
@@ -29,10 +26,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
       <header className="flex items-center justify-between px-4 pt-4 safe-top">
         <button
           type="button"
-          onClick={() => {
-            playTap();
-            onOpenSettings();
-          }}
+          onClick={() => onOpenSettings()}
           aria-label="부모님 설정 열기"
           className="flex items-center justify-center h-11 w-11 rounded-full bg-white border-2 border-[#f1e0c4] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
         >
@@ -48,17 +42,14 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
           className="h-[22vh] max-h-40 w-auto"
           draggable={false}
         />
-        <p className="mt-1 text-xl font-black text-[var(--color-ink)]">{withAYa(name)}, 안녕!</p>
+        <p className="mt-1 text-xl font-black text-[var(--color-ink)]">안녕!</p>
         <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
       </div>
 
       <div className="px-4 pb-1">
         <button
           type="button"
-          onClick={() => {
-            playTap();
-            onPlayStage(resume.stage.id);
-          }}
+          onClick={() => onPlayStage(resume.stage.id)}
           aria-label={`${resume.stage.title} ${resume.isFirstTime ? "시작하기" : "다시 해보기"}`}
           className="w-full flex items-center gap-3 rounded-3xl bg-[var(--color-sunset)] px-5 py-4 text-left text-white shadow-[0_5px_0_var(--color-sunset-deep)] active:translate-y-1 active:shadow-[0_1px_0_var(--color-sunset-deep)] transition-transform"
         >
@@ -77,18 +68,28 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         </button>
       </div>
 
-      <main className="flex-1 px-4 pb-24 overflow-y-auto">
-        <button
-          type="button"
-          onClick={() => {
-            playTap();
-            setStagesOpen((v) => !v);
-          }}
-          aria-expanded={stagesOpen}
-          className="mt-3 w-full rounded-2xl border-2 border-[#f1e0c4] bg-[var(--color-card)] px-4 py-3 text-sm font-black text-[var(--color-ink-soft)] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
-        >
-          단계 고르기 {stagesOpen ? "▴" : "▾"}
-        </button>
+      <main className="flex-1 px-4 pb-6 overflow-y-auto">
+        {/* 보조 행동 두 개를 나란히 둔다.
+            방 꾸미기가 화면 맨 아래에 붙어 있을 때는 단계 목록을 접으면 한참 떨어져 있어
+            있는지도 모르고 지나쳤다. */}
+        <div className="mt-3 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setStagesOpen((v) => !v)}
+            aria-expanded={stagesOpen}
+            className="flex-1 rounded-2xl border-2 border-[#f1e0c4] bg-[var(--color-card)] px-3 py-3 text-sm font-black text-[var(--color-ink-soft)] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+          >
+            단계 고르기 {stagesOpen ? "▴" : "▾"}
+          </button>
+          <button
+            type="button"
+            onClick={onOpenRoom}
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-2xl border-2 border-[#bfe6f2] bg-[#8fd3e8] px-3 py-3 text-sm font-black text-[#1f4a57] shadow-[0_3px_0_#4fa8c2] active:translate-y-0.5"
+          >
+            <Icon name="home" size={18} />
+            방 꾸미기
+          </button>
+        </div>
 
         {stagesOpen && (
         <ol className="relative mt-3 flex flex-col gap-2 pl-2">
@@ -107,10 +108,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
 
                 <button
                   type="button"
-                  onClick={() => {
-                    playTap();
-                    onPlayStage(stage.id);
-                  }}
+                  onClick={() => onPlayStage(stage.id)}
                   aria-label={`${stage.title} 시작하기`}
                   className={`flex-1 mb-3 flex items-center justify-between gap-3 rounded-3xl border-2 px-4 py-3.5 text-left transition-transform bg-[var(--color-card)] active:scale-[0.98] ${
                     isResume
@@ -139,17 +137,6 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         )}
       </main>
 
-      <button
-        type="button"
-        onClick={() => {
-          playTap();
-          onOpenRoom();
-        }}
-        className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 whitespace-nowrap rounded-full bg-[#8fd3e8] border-2 border-[#bfe6f2] px-6 py-3.5 font-extrabold text-[#1f4a57] shadow-[0_5px_0_#4fa8c2] active:translate-y-1 active:shadow-[0_1px_0_#4fa8c2] safe-bottom"
-      >
-        <Icon name="home" size={20} />
-        웨티의 방 꾸미기
-      </button>
     </div>
   );
 }

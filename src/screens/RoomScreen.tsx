@@ -5,7 +5,7 @@ import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
 import { WetiCharacter } from "../components/WetiCharacter";
 import { Confetti } from "../components/ui/Confetti";
-import { playReward, playTap } from "../lib/audio";
+import { playReward } from "../lib/audio";
 
 export function RoomScreen({ onBack }: { onBack: () => void }) {
   const { state, dispatch } = useGame();
@@ -14,7 +14,6 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
 
   const handleUnlock = (id: string, cost: number) => {
     if (state.starBalance < cost) {
-      playTap();
       return;
     }
     dispatch({ type: "UNLOCK_REWARD", rewardId: id });

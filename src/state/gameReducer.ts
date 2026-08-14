@@ -5,8 +5,7 @@ import type { GameState } from "./gameState";
 import { createDefaultState } from "./gameState";
 
 export type GameAction =
-  | { type: "SET_CHILD_NAME"; name: string }
-  | { type: "COMPLETE_ONBOARDING"; name: string }
+  | { type: "COMPLETE_ONBOARDING" }
   | { type: "COMPLETE_STAGE"; stageId: StageId; starsEarned: number }
   | { type: "UNLOCK_STAGE"; stageId: StageId }
   | { type: "UNLOCK_ALL_STAGES" }
@@ -18,11 +17,8 @@ export type GameAction =
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
-    case "SET_CHILD_NAME":
-      return { ...state, childName: action.name };
-
     case "COMPLETE_ONBOARDING":
-      return { ...state, onboarded: true, childName: action.name };
+      return { ...state, onboarded: true };
 
     case "COMPLETE_STAGE": {
       const prevProgress = state.stageProgress[action.stageId];

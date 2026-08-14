@@ -29,10 +29,9 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
   const { state, dispatch } = useGame();
   const stage = getStage(stageId);
   const dayEvent = getDayEvent(stage.dayEventId);
-  const childName = state.childName || "친구";
   const reduceMotion = state.settings.reduceMotion;
 
-  const [problems] = useState(() => generateStageProblems(stage, dayEvent, childName, createRng(Date.now() + Math.random() * 1e6)));
+  const [problems] = useState(() => generateStageProblems(stage, dayEvent, createRng(Date.now() + Math.random() * 1e6)));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [sessionStars, setSessionStars] = useState(0);
@@ -81,7 +80,6 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
       <StageCompleteView
         stage={stage}
         starsEarned={sessionStars}
-        childName={childName}
         onContinue={() => onStageComplete(stageId, sessionStars)}
         reduceMotion={reduceMotion}
       />
@@ -198,13 +196,11 @@ function ProblemView({
 function StageCompleteView({
   stage,
   starsEarned,
-  childName,
   onContinue,
   reduceMotion,
 }: {
   stage: StageConfig;
   starsEarned: number;
-  childName: string;
   onContinue: () => void;
   reduceMotion: boolean;
 }) {
@@ -215,7 +211,7 @@ function StageCompleteView({
         <WetiCharacter mood="excited" size={150} animate={!reduceMotion} />
         <h1 className="text-2xl font-black text-[var(--color-ink)]">{stage.title} 완료!</h1>
         <p className="font-bold text-[var(--color-ink-soft)] max-w-xs text-balance">
-          {childName}야, 정말 잘했어요! 웨티가 {stage.description}
+          정말 잘했어요! 웨티가 {stage.description}
         </p>
         <div className="flex items-center gap-2 text-[#c2830f] font-black text-2xl">
           <Icon name="star" size={30} />+{starsEarned}

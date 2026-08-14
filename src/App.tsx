@@ -22,7 +22,7 @@ function AppShell() {
     return (
       <WelcomeScreen
         reduceMotion={state.settings.reduceMotion}
-        onDone={(name) => dispatch({ type: "COMPLETE_ONBOARDING", name })}
+        onDone={() => dispatch({ type: "COMPLETE_ONBOARDING" })}
       />
     );
   }

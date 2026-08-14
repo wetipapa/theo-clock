@@ -9,7 +9,6 @@ import { playTap } from "../lib/audio";
 
 export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
   const { state, dispatch } = useGame();
-  const [nameDraft, setNameDraft] = useState(state.childName);
   const [confirmReset, setConfirmReset] = useState(false);
 
   const totalCompleted = Object.values(state.stageProgress).filter(Boolean).length;
@@ -38,30 +37,6 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
             아이가 노는 화면은 그대로 두고 설정만 바꿀 수 있어요.
           </p>
         </div>
-
-        {/* 이름 변경 */}
-        <Card className="p-4 flex flex-col gap-2.5">
-          <h2 className="font-extrabold text-[var(--color-ink)]">아이 이름</h2>
-          <div className="flex gap-2">
-            <input
-              value={nameDraft}
-              onChange={(e) => setNameDraft(e.target.value)}
-              maxLength={8}
-              className="flex-1 h-11 rounded-xl border-2 border-[#f1e0c4] bg-[#fffaf1] px-3 font-bold text-[var(--color-ink)] outline-none focus:border-[#ff8a5c]"
-              aria-label="아이 이름 수정"
-            />
-            <Button
-              size="sm"
-              variant="secondary"
-              onClick={() => {
-                const trimmed = nameDraft.trim();
-                if (trimmed) dispatch({ type: "SET_CHILD_NAME", name: trimmed });
-              }}
-            >
-              저장
-            </Button>
-          </div>
-        </Card>
 
         {/* 사운드 */}
         <Card className="p-4 flex items-center justify-between">

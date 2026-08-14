@@ -37,7 +37,7 @@ export interface DayEvent {
   label: string;
   time: ClockTime;
   sceneId: SceneId;
-  /** {name}과 {time} 플레이스홀더를 포함한 안내 문구 */
+  /** {time} 플레이스홀더를 포함한 안내 문구 */
   promptTemplate: string;
   /** 정답을 맞혔을 때 웨티가 하는 행동 설명 */
   actionText: string;

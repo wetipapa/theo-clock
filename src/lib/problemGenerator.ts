@@ -9,26 +9,28 @@ import type {
 import type { ClockTime, SnapMinutes } from "./time";
 import { addMinutes, formatKoreanTime, isSameTime } from "./time";
 import { type Rng, pickFrom, pickInt, shuffle } from "./rng";
-import { withAYa, withEulReul, withEuroRo, withIGa, withIeyoYeyo } from "./korean";
+import { withEulReul, withEuroRo, withIGa, withIeyoYeyo } from "./korean";
 
-// {time_eul}="8시를"/"8시 30분을", {time_euro}="8시로"/"8시 30분으로",
-// {name_a}="지우야"/"민준아" 처럼 받침 유무에 맞는 조사가 이미 붙은 형태로
-// 치환값을 준비해 문법 오류를 막는다.
+// {time_eul}="8시를"/"8시 30분을", {time_euro}="8시로"/"8시 30분으로" 처럼
+// 받침 유무에 맞는 조사가 이미 붙은 형태로 치환값을 준비해 문법 오류를 막는다.
+//
+// 아이 이름을 부르지 않는다. 기본값이 "웨티"라 처음 쓰는 아이에게 남의 이름으로
+// 말을 거는 꼴이 됐고, 이름을 받더라도 문구마다 호칭이 붙으면 금세 어색해진다.
 const SET_HANDS_TEMPLATES = [
-  "{name_a}, 시계 바늘을 돌려서 {time_eul} 만들어볼까?",
+  "시계 바늘을 돌려서 {time_eul} 만들어볼까?",
   "지금 시계를 {time_euro} 맞춰줄래?",
   "짧은 바늘과 긴 바늘을 움직여서 {time_eul} 표시해보자!",
 ];
 
 const CHOOSE_CLOCK_TEMPLATES = [
   "{time_eul} 가리키는 시계는 어떤 걸까요?",
-  "{name_a}, {time}인 시계를 찾아줄래?",
+  "{time}인 시계를 찾아볼까?",
   "여러 시계 중에서 {time_eul} 가리키는 시계를 골라보자!",
 ];
 
 const FLOW_AFTER_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 후에는 몇 시일까요?", "{start}에서 {delta}분이 지나면 몇 시가 될까요?"];
 const FLOW_BEFORE_TEMPLATES = ["지금은 {start_ieyo}. {delta}분 전에는 몇 시였을까요?", "{start}보다 {delta}분 전은 몇 시일까요?"];
-const FLOW_FINAL_TEMPLATE = "{name_a}, 지금은 {start_ieyo}. {delta}분 후면 {label} 시간이에요! 시계를 몇 시로 맞추면 될까요?";
+const FLOW_FINAL_TEMPLATE = "지금은 {start_ieyo}. {delta}분 후면 {label} 시간이에요! 시계를 몇 시로 맞추면 될까요?";
 
 
 /** grid에서 허용되는 분 목록 (예: 10분 그리드 -> 0,10,20,...,50) */
@@ -86,7 +88,7 @@ function buildClockOptions(target: ClockTime, grid: SnapMinutes, rng: Rng): { op
   return { options: shuffled, correctIndex };
 }
 
-function buildClockProblems(stage: StageConfig, dayEvent: DayEvent, childName: string, rng: Rng): Problem[] {
+function buildClockProblems(stage: StageConfig, dayEvent: DayEvent, rng: Rng): Problem[] {
   const problems: Problem[] = [];
   let prevTarget: ClockTime | null = null;
 
@@ -101,8 +103,6 @@ function buildClockProblems(stage: StageConfig, dayEvent: DayEvent, childName: s
     const id = `${stage.id}-${i}`;
 
     const vars = {
-      name: childName,
-      name_a: withAYa(childName),
       time: timeText,
       time_eul: withEulReul(timeText),
       time_euro: withEuroRo(timeText),
@@ -137,7 +137,7 @@ function buildClockProblems(stage: StageConfig, dayEvent: DayEvent, childName: s
 const FLOW_DELTA_OPTIONS = [5, 10, 15, 20, 30, 40, 45];
 const FLOW_FINAL_DELTA_OPTIONS = [15, 20, 30];
 
-function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: string, rng: Rng): TimeFlowProblem[] {
+function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, rng: Rng): TimeFlowProblem[] {
   const problems: TimeFlowProblem[] = [];
   let prevStart: ClockTime | null = null;
 
@@ -155,9 +155,7 @@ function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: st
       target = dayEvent.time;
       const startText = formatKoreanTime(start);
       promptText = replaceVars(FLOW_FINAL_TEMPLATE, {
-        name: childName,
-        name_a: withAYa(childName),
-        start: startText,
+          start: startText,
         start_ieyo: withIeyoYeyo(startText),
         delta: String(delta),
         label: dayEvent.label,
@@ -171,8 +169,7 @@ function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: st
       const templates = direction > 0 ? FLOW_AFTER_TEMPLATES : FLOW_BEFORE_TEMPLATES;
       const startText = formatKoreanTime(start);
       promptText = replaceVars(pickFrom(rng, templates), {
-        name: childName,
-        start: startText,
+          start: startText,
         start_ieyo: withIeyoYeyo(startText),
         delta: String(delta),
       });
@@ -194,7 +191,7 @@ function buildFlowProblems(stage: StageConfig, dayEvent: DayEvent, childName: st
 }
 
 /** 스테이지에 맞는 문제 목록을 생성한다 */
-export function generateStageProblems(stage: StageConfig, dayEvent: DayEvent, childName: string, rng: Rng): Problem[] {
-  if (stage.id === "flow") return buildFlowProblems(stage, dayEvent, childName, rng);
-  return buildClockProblems(stage, dayEvent, childName, rng);
+export function generateStageProblems(stage: StageConfig, dayEvent: DayEvent, rng: Rng): Problem[] {
+  if (stage.id === "flow") return buildFlowProblems(stage, dayEvent, rng);
+  return buildClockProblems(stage, dayEvent, rng);
 }

@@ -15,7 +15,7 @@ export const DAY_EVENTS: DayEvent[] = [
     label: "유치원 버스",
     time: { hour: 8, minute: 0 },
     sceneId: "bus-stop",
-    promptTemplate: "{name_a}, 유치원 버스가 {time}에 와요! 시계를 맞춰서 버스를 놓치지 말자.",
+    promptTemplate: "유치원 버스가 {time}에 와요! 시계를 맞춰서 버스를 놓치지 말자.",
     actionText: "웨티가 버스를 타고 유치원으로 출발했어요!",
   },
   {
@@ -51,7 +51,7 @@ export const DAY_EVENTS: DayEvent[] = [
     label: "목욕시간",
     time: { hour: 6, minute: 30 },
     sceneId: "bath",
-    promptTemplate: "{name_a}, {time}에는 목욕을 해요!",
+    promptTemplate: "{time}에는 목욕을 해요!",
     actionText: "웨티가 보글보글 목욕을 했어요!",
   },
   {
@@ -60,7 +60,7 @@ export const DAY_EVENTS: DayEvent[] = [
     label: "잠자리",
     time: { hour: 8, minute: 30 },
     sceneId: "night",
-    promptTemplate: "{name_a}, {time_iga} 되면 잠자리에 들 시간이에요!",
+    promptTemplate: "{time_iga} 되면 잠자리에 들 시간이에요!",
     actionText: "웨티가 폭 잠들었어요. 잘 자요!",
   },
 ];

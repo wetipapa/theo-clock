@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HubLink } from "../components/HubLink";
 import { getStage } from "../data/stages";
 import { getDayEvent } from "../data/schedule";
 import { generateStageProblems } from "../lib/problemGenerator";
@@ -219,6 +220,7 @@ function StageCompleteView({
         <Button variant="primary" size="lg" onClick={onContinue}>
           계속하기
         </Button>
+        <HubLink className="pt-1" />
       </div>
     </div>
   );

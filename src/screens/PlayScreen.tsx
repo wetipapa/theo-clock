@@ -87,7 +87,7 @@ export function PlayScreen({ stageId, onExit, onStageComplete }: PlayScreenProps
   }
 
   return (
-    <div className="relative flex flex-col min-h-full overflow-hidden">
+    <div className="relative flex flex-col h-full overflow-hidden">
       <SceneBackground sceneId={dayEvent.sceneId} />
 
       <header className="relative z-10 flex items-center justify-between px-4 pt-4 safe-top">
@@ -205,7 +205,7 @@ function StageCompleteView({
   reduceMotion: boolean;
 }) {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-full gap-5 px-6 text-center overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center h-full gap-5 px-6 text-center overflow-hidden">
       <SceneBackground sceneId="home-morning" />
       <div className="relative z-10 flex flex-col items-center gap-4">
         <WetiCharacter mood="excited" size={150} animate={!reduceMotion} />

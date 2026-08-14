@@ -22,7 +22,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
   const [stagesOpen, setStagesOpen] = useState(false);
 
   return (
-    <div className="relative min-h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center justify-between px-4 pt-4 safe-top">
         <button
           type="button"
@@ -35,23 +35,25 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         <StarCounter count={state.starBalance} />
       </header>
 
-      <div className="flex flex-col items-center px-5 pt-1 pb-2">
-        <img
-          src={sceneClock}
-          alt="벽시계를 올려다보는 웨티"
-          className="h-[22vh] max-h-40 w-auto"
-          draggable={false}
-        />
-        <p className="mt-1 text-xl font-black text-[var(--color-ink)]">안녕!</p>
-        <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
-      </div>
+      {/* 형제 서비스(구구단 팡팡)와 같은 리듬. 화면 위쪽에 붙여 빽빽하게 쌓지 않고,
+          가운데에 그림-이름-시작 버튼을 넉넉한 간격으로 세운다. */}
+      <main className="flex-1 min-h-0 flex flex-col items-center justify-center gap-6 px-5 pt-6 pb-8 overflow-y-auto">
+        <div className="flex flex-col items-center gap-2">
+          <img
+            src={sceneClock}
+            alt="벽시계를 올려다보는 웨티"
+            className="h-[26vh] max-h-56 w-auto"
+            draggable={false}
+          />
+          <h1 className="text-3xl font-black text-[var(--color-ink)]">웨티 시계탐험대</h1>
+          <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
+        </div>
 
-      <div className="px-4 pb-1">
         <button
           type="button"
           onClick={() => onPlayStage(resume.stage.id)}
           aria-label={`${resume.stage.title} ${resume.isFirstTime ? "시작하기" : "다시 해보기"}`}
-          className="w-full flex items-center gap-3 rounded-3xl bg-[var(--color-sunset)] px-5 py-4 text-left text-white shadow-[0_5px_0_var(--color-sunset-deep)] active:translate-y-1 active:shadow-[0_1px_0_var(--color-sunset-deep)] transition-transform"
+          className="w-full max-w-sm flex items-center gap-3 rounded-3xl bg-[var(--color-sunset)] px-5 py-5 text-left text-white shadow-[0_5px_0_var(--color-sunset-deep)] active:translate-y-1 active:shadow-[0_1px_0_var(--color-sunset-deep)] transition-transform"
         >
           <span className="flex items-center justify-center h-12 w-12 rounded-full bg-white/25 shrink-0">
             <Icon name={resume.stage.icon} size={24} />
@@ -66,13 +68,12 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
             <Icon name="arrow" size={20} />
           </span>
         </button>
-      </div>
 
-      <main className="flex-1 px-4 pb-6 overflow-y-auto">
         {/* 보조 행동 두 개를 나란히 둔다.
             방 꾸미기가 화면 맨 아래에 붙어 있을 때는 단계 목록을 접으면 한참 떨어져 있어
             있는지도 모르고 지나쳤다. */}
-        <div className="mt-3 flex gap-2">
+        <div className="w-full max-w-sm flex flex-col gap-2">
+        <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setStagesOpen((v) => !v)}
@@ -92,7 +93,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         </div>
 
         {stagesOpen && (
-        <ol className="relative mt-3 flex flex-col gap-2 pl-2">
+        <ol className="relative mt-1 flex flex-col gap-2 pl-2">
           {STAGES.map((stage, i) => {
             const progress = state.stageProgress[stage.id];
             const isLast = i === STAGES.length - 1;
@@ -135,6 +136,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
           })}
         </ol>
         )}
+        </div>
       </main>
 
     </div>

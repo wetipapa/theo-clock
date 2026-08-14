@@ -28,6 +28,12 @@ export type IconName =
   | "teddy"
   | "poster"
   | "rug"
+  | "window"
+  | "wallclock"
+  | "balloon"
+  | "desk"
+  | "toybox"
+  | "garland"
   | "shelf"
   | "kite";
 
@@ -93,14 +99,22 @@ export interface RewardItem {
   cost: number;
   /**
    * 어디에 놓이는 물건인가.
-   * `wall`은 x/y 퍼센트 좌표의 중심에, `floor`는 x 좌표의 바닥선 위에 세운다.
-   * 바닥 물건을 y좌표로 일일이 맞추면 조금만 틀어져도 공중에 뜬 것처럼 보인다.
+   * `floor`는 바닥선 위에 세우고, `wall`은 x/y 좌표를 그림의 중심에 맞춘다.
+   * `floorBack`은 벽에 붙는 큰 가구 — 한 줄에 다 세우면 폭이 모자라서 뒷줄에 둔다.
    */
-  layer: "wall" | "floor";
-  /** 가로 위치(%) — 방 미리보기 폭 기준 */
+  layer: "wall" | "floor" | "floorBack";
+  /** 가로 위치(%) — 그림의 가운데가 여기에 온다 */
   x: number;
   /** 세로 위치(%) — `wall`일 때만 쓴다 */
   y?: number;
-  /** 그려질 크기(px) — 가구다운 덩치가 나오도록 아이템마다 다르게 준다 */
-  size: number;
+  /**
+   * 아이콘 그림이 24칸 뷰박스에서 실제로 차지하는 영역 [x0, y0, x1, y1].
+   * 아이콘마다 뷰박스를 채우는 정도가 달라서, 같은 size를 줘도 그려지는 크기가 제각각이다.
+   * 이 값이 있어야 "방에서 이만큼 커야 한다"를 실제 픽셀로 옮길 수 있다.
+   */
+  art: [number, number, number, number];
+  /** 방에서 차지할 높이 — 웨티 키를 1로 본 비율 */
+  scale: number;
+  /** 러그처럼 위에서 내려다본 그림을 옆모습 방에 깔 때 눌러 주는 비율 */
+  squashY?: number;
 }

@@ -3,45 +3,89 @@ import { REWARD_ITEMS } from "../data/rewards";
 import { useGame } from "../state/GameContext";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
-import { WetiCharacter } from "../components/WetiCharacter";
 import { Confetti } from "../components/ui/Confetti";
 import { playReward } from "../lib/audio";
 import { withEulReul } from "../lib/korean";
 import type { RewardItem } from "../types";
+import wetiFullbody from "../assets/characters/weti-fullbody.png";
 
-/** 미리보기 박스에서 바닥이 시작되는 높이(아래에서부터 %) */
-const FLOOR_TOP = 30;
-/** 바닥 물건이 서는 선(아래에서부터 %) — 바닥면보다 조금 앞쪽 */
-const FLOOR_LINE = 13;
+/** 방 높이 대비 웨티 키(%). 물건 크기는 전부 이 키를 기준으로 계산한다 */
+const WETI_H_PCT = 40;
+/** 바닥면이 시작되는 높이 = 벽과 바닥이 만나는 선(아래에서부터 %) */
+const FLOOR_TOP = 34;
+/** 앞줄 물건이 서는 선(아래에서부터 %) */
+const FLOOR_LINE = 12;
+/**
+ * 벽에 붙는 뒷줄 가구가 서는 선.
+ * 벽과 바닥이 만나는 선에 딱 세워야 "벽에 붙어 있다"로 읽힌다.
+ * 앞줄과 높이가 비슷하면 전부 한 덩어리로 뭉쳐 보인다.
+ */
+const FLOOR_LINE_BACK = FLOOR_TOP;
 
-function RoomItem({ item, popping }: { item: RewardItem; popping: boolean }) {
+/** 컨테이너의 실제 픽셀 크기. 물건 크기를 방 크기에 맞춰 계산하려면 필요하다 */
+function useBoxSize(ref: React.RefObject<HTMLDivElement | null>) {
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setSize({ w: width, h: height });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref]);
+  return size;
+}
+
+function RoomItem({ item, boxH, popping }: { item: RewardItem; boxH: number; popping: boolean }) {
+  const [ax0, ay0, ax1, ay1] = item.art;
+  const artH = ay1 - ay0;
+  // 그리고 싶은 실제 높이에서 거꾸로 아이콘 뷰박스 크기를 구한다
+  const size = (item.scale * boxH * (WETI_H_PCT / 100) * 24) / artH;
+  const artCx = ((ax0 + ax1) / 2 / 24) * size; // svg 왼쪽 끝에서 그림 한가운데까지
+  const artBottom = (ay1 / 24) * size; // svg 위쪽 끝에서 그림 밑단까지
+  const gapBelow = size - artBottom; // 그림 밑단 아래로 남는 빈 공간
+
   const anim = popping ? "animate-[pop-in_0.5s_ease-out]" : "";
+  const inner = (
+    <div
+      style={
+        item.squashY
+          ? { transform: `scaleY(${item.squashY})`, transformOrigin: `50% ${artBottom}px` }
+          : undefined
+      }
+    >
+      <Icon name={item.icon} size={size} />
+    </div>
+  );
+
   if (item.layer === "wall") {
+    const artCy = ((ay0 + ay1) / 2 / 24) * size;
     return (
       <div
-        className={`absolute -translate-x-1/2 -translate-y-1/2 ${anim}`}
-        style={{ left: `${item.x}%`, top: `${item.y}%` }}
+        className={`absolute ${anim}`}
+        style={{ left: `${item.x}%`, top: `${item.y}%`, transform: `translate(${-artCx}px, ${-artCy}px)` }}
       >
-        <Icon name={item.icon} size={item.size} />
+        {inner}
       </div>
     );
   }
-  // 러그는 바닥에 깔리는 물건이라 캐릭터·다른 가구보다 뒤(아래)에 깐다.
-  // 아이콘 원본(24칸 중 10칸 높이)을 그대로 키우면 두툼한 덩어리로 보여
-  // 러그가 아니라 정체 불명의 물체가 되므로, 폭만 살리고 높이를 눌러 깐다.
-  const isRug = item.id === "rug";
+
+  const back = item.layer === "floorBack";
   return (
     <div
       className={`absolute ${anim}`}
       style={{
         left: `${item.x}%`,
-        bottom: `${isRug ? FLOOR_LINE - 5 : FLOOR_LINE}%`,
-        zIndex: isRug ? 1 : 3,
-        transform: isRug ? "translateX(-50%) scaleY(0.42)" : "translateX(-50%)",
-        transformOrigin: "bottom center",
+        bottom: `${back ? FLOOR_LINE_BACK : FLOOR_LINE}%`,
+        // 그림 밑단이 정확히 바닥선에 오도록, 아래 빈 공간만큼 내려 준다
+        transform: `translate(${-artCx}px, ${gapBelow}px)`,
+        // 벽 가구는 웨티 뒤, 러그처럼 바닥에 깔리는 것도 뒤, 나머지 작은 물건은 앞
+        zIndex: back || item.squashY ? 1 : 3,
       }}
     >
-      <Icon name={item.icon} size={item.size} />
+      {inner}
     </div>
   );
 }
@@ -52,6 +96,8 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
   // 연달아 사면 앞 타이머가 살아남아 방금 산 물건의 안내 문구를 지워 버렸다.
   const clearTimer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(clearTimer.current), []);
+  const roomRef = useRef<HTMLDivElement>(null);
+  const box = useBoxSize(roomRef);
   const reduceMotion = state.settings.reduceMotion;
 
   const unlocked = REWARD_ITEMS.filter((item) => state.unlockedRewardIds.includes(item.id));
@@ -69,7 +115,7 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="relative min-h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center justify-between px-4 pt-4 safe-top">
         <button
           type="button"
@@ -85,25 +131,33 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
 
       {/* 방 미리보기 — 산 물건이 여기에 바로 나타나야 "샀다"는 게 느껴진다 */}
       <div
-        className="relative mx-4 mt-4 h-64 sm:h-72 rounded-[32px] overflow-hidden border-4 border-[#f1e0c4]"
+        ref={roomRef}
+        className="relative mx-4 mt-4 h-72 sm:h-80 shrink-0 rounded-[32px] overflow-hidden border-4 border-[#f1e0c4]"
         style={{ background: "linear-gradient(180deg,#fff1dc 0%,#fff8ee 55%)" }}
       >
-        {/* 바닥 */}
         <div className="absolute inset-x-0 bottom-0" style={{ height: `${FLOOR_TOP}%`, background: "#e8c893" }} />
         <div className="absolute inset-x-0" style={{ bottom: `${FLOOR_TOP}%`, height: 4, background: "#d3ab72" }} />
 
-        {unlocked.map((item) => (
-          <RoomItem key={item.id} item={item} popping={!reduceMotion && justUnlocked === item.id} />
-        ))}
+        {box.h > 0 &&
+          unlocked.map((item) => (
+            <RoomItem
+              key={item.id}
+              item={item}
+              boxH={box.h}
+              popping={!reduceMotion && justUnlocked === item.id}
+            />
+          ))}
 
-        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: `${FLOOR_LINE - 3}%`, zIndex: 2 }}>
-          <WetiCharacter mood="happy" size={76} />
-        </div>
+        <img
+          src={wetiFullbody}
+          alt="자기 방에 서 있는 웨티"
+          draggable={false}
+          className="absolute left-1/2 -translate-x-1/2"
+          style={{ bottom: `${FLOOR_LINE}%`, height: `${WETI_H_PCT}%`, width: "auto", zIndex: 2 }}
+        />
 
         {unlocked.length === 0 && (
-          <p className="absolute inset-x-0 top-5 text-center text-sm font-bold text-[#b79a6a]">
-            아직 텅 비었어요
-          </p>
+          <p className="absolute inset-x-0 top-5 text-center text-sm font-bold text-[#b79a6a]">아직 텅 비었어요</p>
         )}
 
         <Confetti active={!!justUnlocked} reduceMotion={reduceMotion} count={14} />
@@ -120,7 +174,7 @@ export function RoomScreen({ onBack }: { onBack: () => void }) {
           : "별을 모아서 방을 예쁘게 꾸며주세요!"}
       </p>
 
-      <main className="flex-1 px-4 py-4 overflow-y-auto">
+      <main className="flex-1 min-h-0 px-4 py-4 overflow-y-auto">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {REWARD_ITEMS.map((item) => {
             const owned = state.unlockedRewardIds.includes(item.id);

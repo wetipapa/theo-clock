@@ -203,7 +203,6 @@ function renderIcon(name: IconName) {
           <rect x="3" y="3" width="18" height="14" rx="1.5" fill="#fff6ea" stroke="#8a6a4a" strokeWidth="1.4" />
           <path d="M5 14l4-5 3 3 3-4 4 6z" fill="#8fd3e8" />
           <circle cx="8" cy="7" r="1.5" fill="#ffd166" />
-          <rect x="9" y="18" width="6" height="3" fill="#8a6a4a" />
         </g>
       );
     case "rug":
@@ -229,6 +228,60 @@ function renderIcon(name: IconName) {
           <path d="M12 2l7 7-7 13-7-13z" fill="#8fd3e8" />
           <path d="M12 2l7 7-7 3z" fill="#4fa8c2" />
           <path d="M12 22c1 1 1 2 3 2M12 22c-1 1-1 2-3 2" stroke="#8a6a4a" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+        </g>
+      );
+    case "window":
+      return (
+        <g>
+          <rect x="3" y="2" width="18" height="16" rx="1.5" fill="#bfe6f2" stroke="#8a6a4a" strokeWidth="1.6" />
+          <path d="M12 2v16M3 10h18" stroke="#8a6a4a" strokeWidth="1.4" />
+          <circle cx="7.5" cy="6" r="1.6" fill="#ffd166" />
+          <path d="M3 18h18" stroke="#8a6a4a" strokeWidth="2.2" strokeLinecap="round" />
+        </g>
+      );
+    case "wallclock":
+      return (
+        <g>
+          <circle cx="12" cy="12" r="9" fill="#fff6ea" stroke="#8a6a4a" strokeWidth="1.8" />
+          <path d="M12 7v5l3.5 2" stroke="#4a3626" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+          <circle cx="12" cy="12" r="1" fill="#ff8a5c" />
+        </g>
+      );
+    case "balloon":
+      return (
+        <g>
+          <ellipse cx="12" cy="9" rx="6.5" ry="7.5" fill="#ff8a5c" />
+          <ellipse cx="9.6" cy="6.5" rx="1.6" ry="2.2" fill="#fff6ea" opacity="0.6" />
+          <path d="M12 16.5l-1.4 2h2.8z" fill="#e06a3f" />
+          <path d="M12 18.5c1.4 1.6-1.4 3 0 4.5" stroke="#8a6a4a" strokeWidth="1.1" fill="none" strokeLinecap="round" />
+        </g>
+      );
+    case "desk":
+      return (
+        <g>
+          <rect x="2" y="9" width="20" height="2.6" rx="1.2" fill="#c98a56" />
+          <rect x="3.5" y="11.6" width="2" height="8.4" rx="0.8" fill="#8a6a4a" />
+          <rect x="18.5" y="11.6" width="2" height="8.4" rx="0.8" fill="#8a6a4a" />
+          <rect x="6.5" y="12" width="11" height="5.5" rx="1" fill="#e3a45c" />
+          <path d="M9 14.8h6" stroke="#8a6a4a" strokeWidth="1.2" strokeLinecap="round" />
+        </g>
+      );
+    case "toybox":
+      return (
+        <g>
+          <rect x="3" y="11" width="18" height="9" rx="1.6" fill="#ffd166" />
+          <rect x="2" y="8.5" width="20" height="3.2" rx="1.4" fill="#ff8a5c" />
+          <rect x="10.5" y="11" width="3" height="9" fill="#e0a52f" />
+          <circle cx="12" cy="10.1" r="1" fill="#fff6ea" />
+        </g>
+      );
+    case "garland":
+      return (
+        <g>
+          <path d="M2 5q10 7 20 0" stroke="#8a6a4a" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+          <path d="M5.5 7.6l1.1 2.3 2.5.3-1.9 1.7.5 2.5-2.2-1.2-2.2 1.2.5-2.5L2 10.2l2.5-.3z" fill="#ffd166" />
+          <path d="M12 9.4l1.1 2.3 2.5.3-1.9 1.7.5 2.5L12 15l-2.2 1.2.5-2.5-1.9-1.7 2.5-.3z" fill="#ff8a5c" />
+          <path d="M18.5 7.6l1.1 2.3 2.4.3-1.8 1.7.5 2.5-2.2-1.2-2.2 1.2.5-2.5-1.9-1.7 2.5-.3z" fill="#8fd3e8" />
         </g>
       );
     default:

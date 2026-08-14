@@ -19,7 +19,7 @@ interface WelcomeScreenProps {
  */
 export function WelcomeScreen({ onDone, reduceMotion }: WelcomeScreenProps) {
   return (
-    <div className="relative min-h-full flex flex-col overflow-hidden">
+    <div className="relative h-full flex flex-col overflow-hidden">
       <SceneBackground sceneId="home-morning" />
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-6 px-6 py-10 safe-top safe-bottom">
         <WetiCharacter mood="happy" size={120} animate={!reduceMotion} />

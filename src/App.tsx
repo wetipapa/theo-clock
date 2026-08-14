@@ -65,8 +65,8 @@ function AppShell() {
 
 function App() {
   return (
-    <div className="min-h-screen w-full flex justify-center bg-[#e9dcc3]">
-      <div className="relative w-full max-w-md min-h-screen bg-[var(--color-cream)] shadow-2xl overflow-hidden">
+    <div className="h-screen w-full flex justify-center bg-[#e9dcc3]">
+      <div className="relative w-full max-w-md h-full bg-[var(--color-cream)] shadow-2xl overflow-hidden">
         <GameProvider>
           <AppShell />
         </GameProvider>

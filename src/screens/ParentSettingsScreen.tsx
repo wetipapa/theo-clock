@@ -14,7 +14,7 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
   const totalCompleted = Object.values(state.stageProgress).filter(Boolean).length;
 
   return (
-    <div className="relative min-h-full flex flex-col bg-[var(--color-cream)]">
+    <div className="relative h-full flex flex-col bg-[var(--color-cream)]">
       <header className="flex items-center gap-3 px-4 pt-4 safe-top">
         <button
           type="button"
@@ -27,7 +27,7 @@ export function ParentSettingsScreen({ onBack }: { onBack: () => void }) {
         <h1 className="font-black text-lg text-[var(--color-ink)]">부모님 설정</h1>
       </header>
 
-      <main className="flex-1 px-4 py-4 overflow-y-auto flex flex-col gap-4 max-w-md w-full mx-auto">
+      <main className="flex-1 min-h-0 px-4 py-4 overflow-y-auto flex flex-col gap-4 max-w-md w-full mx-auto">
         {/* 부모용 화면이라 웨티아빠가 안내를 맡는다. 아이가 노는 화면에는 웨티만 나온다. */}
         <div className="flex items-center gap-3 px-1">
           <WetiCharacter papa size={52} />

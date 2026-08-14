@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { STAGES, pickResumeStage } from "../data/stages";
 import { useGame } from "../state/GameContext";
 import type { StageId } from "../types";
 import { Icon } from "../components/Icon";
 import { StarCounter } from "../components/ui/StarCounter";
-import { WetiCharacter } from "../components/WetiCharacter";
+import sceneClock from "../assets/characters/weti-scene-clock.png";
 import { playTap } from "../lib/audio";
 import { withAYa } from "../lib/korean";
 
@@ -19,6 +20,9 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
   // 6~8세가 "다음에 뭘 누를지"를 읽지 않고 알 수 있도록, 이어서 할 단계 하나를 크게 띄운다.
   // 단계 목록은 그대로 아래에 남겨 원하는 단계를 직접 고를 수도 있다.
   const resume = pickResumeStage(state.stageProgress);
+  // 단계 목록은 접어 둔다. 형제 서비스(웨티 레이싱·구구단 팡팡)와 같은 구조로,
+  // 첫 화면에서 가장 큰 것은 '시작하기'이고 고르는 일은 원할 때 펼쳐서 한다.
+  const [stagesOpen, setStagesOpen] = useState(false);
 
   return (
     <div className="relative min-h-full flex flex-col bg-[var(--color-cream)]">
@@ -37,12 +41,15 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
         <StarCounter count={state.starBalance} />
       </header>
 
-      <div className="flex items-center gap-3 px-5 pt-4 pb-2">
-        <WetiCharacter mood="idle" size={64} animate={!state.settings.reduceMotion} />
-        <div>
-          <p className="text-lg font-black text-[var(--color-ink)]">{withAYa(name)}, 안녕!</p>
-          <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
-        </div>
+      <div className="flex flex-col items-center px-5 pt-1 pb-2">
+        <img
+          src={sceneClock}
+          alt="벽시계를 올려다보는 웨티"
+          className="h-[22vh] max-h-40 w-auto"
+          draggable={false}
+        />
+        <p className="mt-1 text-xl font-black text-[var(--color-ink)]">{withAYa(name)}, 안녕!</p>
+        <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
       </div>
 
       <div className="px-4 pb-1">
@@ -71,8 +78,20 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
       </div>
 
       <main className="flex-1 px-4 pb-24 overflow-y-auto">
-        <p className="px-1 pt-3 pb-1 text-xs font-black text-[var(--color-ink-soft)]">모든 단계</p>
-        <ol className="relative flex flex-col gap-2 pl-2">
+        <button
+          type="button"
+          onClick={() => {
+            playTap();
+            setStagesOpen((v) => !v);
+          }}
+          aria-expanded={stagesOpen}
+          className="mt-3 w-full rounded-2xl border-2 border-[#f1e0c4] bg-[var(--color-card)] px-4 py-3 text-sm font-black text-[var(--color-ink-soft)] shadow-[0_3px_0_#f1e0c4] active:translate-y-0.5"
+        >
+          단계 고르기 {stagesOpen ? "▴" : "▾"}
+        </button>
+
+        {stagesOpen && (
+        <ol className="relative mt-3 flex flex-col gap-2 pl-2">
           {STAGES.map((stage, i) => {
             const progress = state.stageProgress[stage.id];
             const isLast = i === STAGES.length - 1;
@@ -117,6 +136,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
             );
           })}
         </ol>
+        )}
       </main>
 
       <button

@@ -12,6 +12,7 @@
 | `weti-proud.png` | `weti_mono_06_proud.png` |
 | `weti-thinking.png` | `weti_mono_05_thinking.png` |
 | `weti-sleepy.png` | `weti_mono_08_sleepy.png` |
+| `weti-scene-clock.png` | `character-scenes/transparent/weti_scene_clock.png` | 첫 화면 |
 | `wetipapa-idle.png` | `wetipapa_mono_00_master.png` |
 
 ## 처리 방식

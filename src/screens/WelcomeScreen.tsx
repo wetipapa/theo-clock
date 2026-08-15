@@ -24,7 +24,7 @@ export function WelcomeScreen({ onDone, reduceMotion }: WelcomeScreenProps) {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-6 px-6 py-10 safe-top safe-bottom">
         <WetiCharacter mood="happy" size={120} animate={!reduceMotion} />
         <div className="text-center">
-          <h1 className="text-2xl font-black text-[var(--color-ink)]">웨티 시계탐험대</h1>
+          <h1 className="text-2xl font-black text-[var(--color-ink)]">시계탐험대</h1>
           <p className="mt-1 font-bold text-[var(--color-ink-soft)]">시계 읽기와 친해지는 하루 이야기</p>
         </div>
 

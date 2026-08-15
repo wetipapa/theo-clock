@@ -11,7 +11,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "웨티 시계탐험대",
+        name: "시계탐험대",
         short_name: "시계탐험대",
         description: "웨티와 함께 시계 읽기를 배우는 어린이 교육 게임",
         theme_color: "#ff8a5c",

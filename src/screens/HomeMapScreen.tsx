@@ -19,7 +19,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
   // 6~8세가 "다음에 뭘 누를지"를 읽지 않고 알 수 있도록, 이어서 할 단계 하나를 크게 띄운다.
   // 단계 목록은 그대로 아래에 남겨 원하는 단계를 직접 고를 수도 있다.
   const resume = pickResumeStage(state.stageProgress);
-  // 단계 목록은 접어 둔다. 형제 서비스(웨티 레이싱·구구단 팡팡)와 같은 구조로,
+  // 단계 목록은 접어 둔다. 형제 서비스(구구단 레이싱·구구단 팡팡)와 같은 구조로,
   // 첫 화면에서 가장 큰 것은 '시작하기'이고 고르는 일은 원할 때 펼쳐서 한다.
   const [stagesOpen, setStagesOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export function HomeMapScreen({ onPlayStage, onOpenRoom, onOpenSettings }: HomeM
             className="h-[26vh] max-h-56 w-auto"
             draggable={false}
           />
-          <h1 className="text-3xl font-black text-[var(--color-ink)]">웨티 시계탐험대</h1>
+          <h1 className="text-3xl font-black text-[var(--color-ink)]">시계탐험대</h1>
           <p className="text-sm font-bold text-[var(--color-ink-soft)]">오늘은 어떤 시간을 배워볼까요?</p>
         </div>
 

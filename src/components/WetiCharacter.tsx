@@ -31,7 +31,7 @@ interface WetiCharacterProps {
   className?: string;
   /** 움직임 허용 여부. 부모 설정의 "움직임 줄이기"가 꺼져 있을 때만 true */
   animate?: boolean;
-  /** 웨티아빠로 그린다. 부모용 화면에만 쓴다 */
+  /** 웨티파파로 그린다. 부모용 화면에만 쓴다 */
   papa?: boolean;
 }
 
@@ -68,7 +68,7 @@ export function WetiCharacter({ mood = "idle", size = 140, className, animate = 
   }, [canBlink]);
 
   const src = papa ? papaIdle : blinking ? blink : FACE[mood];
-  const label = papa ? "웨티아빠" : LABEL[mood];
+  const label = papa ? "웨티파파" : LABEL[mood];
 
   return (
     <div

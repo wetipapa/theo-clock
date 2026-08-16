@@ -8,6 +8,7 @@ import { RoomScreen } from "./screens/RoomScreen";
 import { ParentSettingsScreen } from "./screens/ParentSettingsScreen";
 import { ParentGate } from "./screens/ParentGate";
 import type { StageId } from "./types";
+import { trackStart, trackComplete, trackReplay } from "./lib/track";
 
 type Screen = "home" | "play" | "room" | "settings";
 
@@ -16,6 +17,9 @@ function AppShell() {
   useSound(); // settings.soundOn 값을 Web Audio 모듈과 동기화
   const [screen, setScreen] = useState<Screen>("home");
   const [playingStage, setPlayingStage] = useState<StageId | null>(null);
+  // 같은 단계를 다시 고르면 '다시하기'로 센다. 이 게임은 결과 화면 대신
+  // 지도로 돌아오는 구조라, 한 번 더 하는지가 지도에서 갈린다
+  const [lastStage, setLastStage] = useState<StageId | null>(null);
   const [gateOpen, setGateOpen] = useState(false);
 
   if (!state.onboarded) {
@@ -32,7 +36,10 @@ function AppShell() {
       <PlayScreen
         stageId={playingStage}
         onExit={() => setScreen("home")}
-        onStageComplete={() => setScreen("home")}
+        onStageComplete={() => {
+          trackComplete();
+          setScreen("home");
+        }}
       />
     );
   }
@@ -44,6 +51,9 @@ function AppShell() {
     <>
       <HomeMapScreen
         onPlayStage={(id) => {
+          if (id === lastStage) trackReplay();
+          trackStart();
+          setLastStage(id);
           setPlayingStage(id);
           setScreen("play");
         }}
